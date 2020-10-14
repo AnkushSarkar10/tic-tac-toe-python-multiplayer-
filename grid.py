@@ -22,6 +22,13 @@ class Grid:
                     ,[0,0,0]
                     ,[0,0,0]]
 
+
+        self.switch_player = True
+        # search directions  N       NW        W      SW      S     SE      E       NE 
+        self.search_dir = [(0,-1) ,(-1,-1), (-1,0), (-1,1), (0,1), (1,1), (1,0), (1,-1)]
+        
+        self.game_over = False
+
     def draw(self, win):
         for line in self.grid_lines:
             pygame.draw.line(win, (255,255,255), line[0], line[1], 2)
@@ -44,7 +51,72 @@ class Grid:
         self.grid[y][x] = value
 
     def get_mouse(self, x, y, player):
-        if player == "X":
-            self.set_cell_value(x, y, "X")
-        elif player == "O":
-            self.set_cell_value(x, y, "O")
+        if self.get_cell_value(x,y) == 0:
+            self.switch_player = True
+            if player == "X":
+                self.set_cell_value(x, y, "X")
+            elif player == "O":
+                self.set_cell_value(x, y, "O")
+            self.check_grid(x, y, player)
+        else:
+            self.switch_player = False
+
+    def is_within_bound(self, x, y):
+        return x >= 0 and x < 3 and y>= 0 and y < 3
+
+    def check_grid(self,x,y,player):    
+        count = 1
+        for index, (dirx, diry) in enumerate(self.search_dir):
+            if self.is_within_bound(x+dirx, y+diry) and self.get_cell_value(x+dirx , y+diry) == player:
+                count += 1
+                xx = x + dirx
+                yy = y + diry
+                if self.is_within_bound(xx+dirx, yy+diry) and self.get_cell_value(xx+dirx, yy+diry) == player:
+                    count += 1
+                    if count == 3:
+                        break
+                
+            if count < 3:
+                new_dir = 0
+            # now we need to reverse the direction or else we can count 3 cells but they might not be a row or a column
+                if index == 0:
+                    new_dir = self.search_dir[4] # N to S
+                elif index == 1:
+                    new_dir = self.search_dir[5] # NW to SE
+                elif index == 2:
+                    new_dir = self.search_dir[6] # W to E
+                elif index == 3:
+                    new_dir = self.search_dir[7] # SW to NE
+                elif index == 4:
+                    new_dir = self.search_dir[0] # S to N
+                elif index == 5:
+                    new_dir = self.search_dir[1] # SE to NW
+                elif index == 6:
+                    new_dir = self.search_dir[2] # E to W
+                elif index == 7:
+                    new_dir = self.search_dir[3] # NE to SW
+                
+                if self.is_within_bound(x + new_dir[0], y + new_dir[1]) and self.get_cell_value(x + new_dir[0], y + new_dir[1]) == player:
+                    count += 1
+                    if count == 3:
+                        break
+                else:
+                    count = 1
+
+        if count == 3:
+            print(player, "Wins!!!")
+            self.game_over = True
+        else:
+            self.game_over = self.is_grid_full()
+                
+    def is_grid_full(self):
+        for row in self.grid:
+            for value in row:
+                if value == 0:
+                    return False
+        return True
+
+    def clear_grid(self):
+        for y in range(len(self.grid)):
+            for x in range(len(self.grid[y])):
+                self.set_cell_value(x, y , 0)
