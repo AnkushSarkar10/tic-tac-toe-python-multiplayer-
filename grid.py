@@ -76,32 +76,32 @@ class Grid:
                     if count == 3:
                         break
                 
-            if count < 3:
-                new_dir = 0
-            # now we need to reverse the direction or else we can count 3 cells but they might not be a row or a column
-                if index == 0:
-                    new_dir = self.search_dir[4] # N to S
-                elif index == 1:
-                    new_dir = self.search_dir[5] # NW to SE
-                elif index == 2:
-                    new_dir = self.search_dir[6] # W to E
-                elif index == 3:
-                    new_dir = self.search_dir[7] # SW to NE
-                elif index == 4:
-                    new_dir = self.search_dir[0] # S to N
-                elif index == 5:
-                    new_dir = self.search_dir[1] # SE to NW
-                elif index == 6:
-                    new_dir = self.search_dir[2] # E to W
-                elif index == 7:
-                    new_dir = self.search_dir[3] # NE to SW
-                
-                if self.is_within_bound(x + new_dir[0], y + new_dir[1]) and self.get_cell_value(x + new_dir[0], y + new_dir[1]) == player:
-                    count += 1
-                    if count == 3:
-                        break
-                else:
-                    count = 1
+                if count < 3:
+                    new_dir = 0
+                # now we need to reverse the direction or else we can count 3 cells but they might not be a row or a column
+                    if index == 0:
+                        new_dir = self.search_dir[4] # N to S
+                    elif index == 1:
+                        new_dir = self.search_dir[5] # NW to SE
+                    elif index == 2:
+                        new_dir = self.search_dir[6] # W to E
+                    elif index == 3:
+                        new_dir = self.search_dir[7] # SW to NE
+                    elif index == 4:
+                        new_dir = self.search_dir[0] # S to N
+                    elif index == 5:
+                        new_dir = self.search_dir[1] # SE to NW
+                    elif index == 6:
+                        new_dir = self.search_dir[2] # E to W
+                    elif index == 7:
+                        new_dir = self.search_dir[3] # NE to SW
+                    
+                    if self.is_within_bound(x + new_dir[0], y + new_dir[1]) and self.get_cell_value(x + new_dir[0], y + new_dir[1]) == player:
+                        count += 1
+                        if count == 3:
+                            break
+                    else:
+                        count = 1
 
         if count == 3:
             print(player, "Wins!!!")

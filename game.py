@@ -11,7 +11,7 @@ win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Tic-tac-toe")
 
 
-def main() :    
+def main() :
     running = True
     player = "X"
     grid = Grid()  # making the grid object
@@ -36,10 +36,11 @@ def main() :
                         
                     grid.print_grid()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and grid.game_over:
+                if event.key == pygame.K_SPACE and grid.game_over:                     
                     grid.clear_grid()
+                    player = "X"
                     grid.game_over = False
-
+ 
         win.fill((22,32,101))
         grid.draw(win)
 
