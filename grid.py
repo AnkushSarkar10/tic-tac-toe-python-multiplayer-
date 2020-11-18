@@ -1,6 +1,7 @@
 import pygame
 import os 
 
+pygame.init()
 
 # loading the images as python object 
 x_img = pygame.image.load(os.path.join("images","the-letter-x.png")) 
@@ -29,7 +30,11 @@ class Grid:
         
         self.game_over = False
 
+        self.winner = None
+
     def draw(self, win):
+        win.fill((9, 132, 227,1.0))
+
         for line in self.grid_lines:
             pygame.draw.line(win, (255,255,255), line[0], line[1], 2)
 
@@ -39,6 +44,14 @@ class Grid:
                     win.blit(x_img, (x*200, y*200))
                 elif self.get_cell_value(x,y) == "O":
                     win.blit(o_img, (x*200, y*200))
+
+        if self.game_over:
+            font = pygame.font.SysFont('unispacebold', 60, True)
+            text = font.render("{} won the game!".format(self.winner), True, (47, 54, 64,1.0))
+            win.fill((9, 132, 227, 1.0))
+            win.blit(text, (35, 250))
+
+        
 
     def print_grid(self):
         for row in self.grid:
@@ -51,15 +64,9 @@ class Grid:
         self.grid[y][x] = value
 
     def get_mouse(self, x, y, player):
-        if self.get_cell_value(x,y) == 0:
-            self.switch_player = True
-            if player == "X":
-                self.set_cell_value(x, y, "X")
-            elif player == "O":
-                self.set_cell_value(x, y, "O")
+        if self.get_cell_value(x, y) == 0:
+            self.set_cell_value(x, y, player)
             self.check_grid(x, y, player)
-        else:
-            self.switch_player = False
 
     def is_within_bound(self, x, y):
         return x >= 0 and x < 3 and y>= 0 and y < 3
@@ -105,6 +112,7 @@ class Grid:
 
         if count == 3:
             print(player, "Wins!!!")
+            self.winner = player
             self.game_over = True
         else:
             self.game_over = self.is_grid_full()
