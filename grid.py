@@ -28,30 +28,40 @@ class Grid:
         # search directions  N       NW        W      SW      S     SE      E       NE 
         self.search_dir = [(0,-1) ,(-1,-1), (-1,0), (-1,1), (0,1), (1,1), (1,0), (1,-1)]
         
+        self.waiting_for_conn = False
+
         self.game_over = False
 
         self.winner = None
+        
 
     def draw(self, win):
-        win.fill((9, 132, 227,1.0))
-
-        for line in self.grid_lines:
-            pygame.draw.line(win, (255,255,255), line[0], line[1], 2)
-
-        for y in range(len(self.grid)):
-            for x in range(len(self.grid[y])):
-                if self.get_cell_value(x,y) == "X":
-                    win.blit(x_img, (x*200, y*200))
-                elif self.get_cell_value(x,y) == "O":
-                    win.blit(o_img, (x*200, y*200))
-
-        if self.game_over:
-            font = pygame.font.SysFont('unispacebold', 60, True)
-            text = font.render("{} won the game!".format(self.winner), True, (47, 54, 64,1.0))
+        if self.waiting_for_conn:
+            font = pygame.font.SysFont('unispacebold', 40, True)
+            text = font.render("Waiting for client...", True, (47, 54, 64,1.0))
             win.fill((9, 132, 227, 1.0))
             win.blit(text, (35, 250))
+        else:
+            win.fill((9, 132, 227,1.0))
 
-        
+            for line in self.grid_lines:
+                pygame.draw.line(win, (255,255,255), line[0], line[1], 2)
+
+            for y in range(len(self.grid)):
+                for x in range(len(self.grid[y])):
+                    if self.get_cell_value(x,y) == "X":
+                        win.blit(x_img, (x*200, y*200))
+                    elif self.get_cell_value(x,y) == "O":
+                        win.blit(o_img, (x*200, y*200))
+
+            if self.game_over:
+                font = pygame.font.SysFont('unispacebold', 60, True)
+                text = font.render("{} won the game!".format(self.winner), True, (47, 54, 64,1.0))
+                win.fill((9, 132, 227, 1.0))
+                win.blit(text, (35, 250))
+
+
+
 
     def print_grid(self):
         for row in self.grid:

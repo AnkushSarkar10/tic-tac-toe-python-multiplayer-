@@ -14,10 +14,11 @@ def create_thread(target):
 #socket
 import socket
 
-HOST = "127.0.0.1"
+# HOST = "127.0.0.1"
+HOST = "192.168.0.7"
 PORT = 65432
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #sock stream is used for TCP protocols
 sock.connect((HOST,PORT))
 
 def receive_data():

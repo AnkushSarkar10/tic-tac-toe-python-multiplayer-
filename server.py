@@ -14,7 +14,8 @@ def create_thread(target):
 import socket
 
 
-HOST = "127.0.0.1"
+# HOST = "127.0.0.1"  
+HOST = "192.168.0.7"
 PORT = 65432
 ADDR = (HOST,PORT)
 connection_established = False
@@ -45,15 +46,6 @@ def receive_data():
         print(data)
 
 
-def waiting_for_connection():
-    global conn, addr, connection_established
-    conn , addr = sock.accept() # it will wait for a connection , also blocks any new threads 
-    print("Client is connected!!!")
-    connection_established = True
-    receive_data()
-
-create_thread(waiting_for_connection)
-
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = "500, 150"
 
@@ -70,6 +62,23 @@ turn = True
 playing = "True"
 grid = Grid()  # making the grid object
 clock = pygame.time.Clock() 
+
+
+def waiting_for_connection():
+    global conn, addr, connection_established, grid
+
+    print("Waiting for connection....")
+    grid.waiting_for_conn = True
+    
+    conn , addr = sock.accept() # it will wait for a connection , also blocks any new threads 
+    print("Client is connected!!!")
+
+    grid.waiting_for_conn = False
+    connection_established = True
+
+    receive_data()
+
+create_thread(waiting_for_connection)
 
 def main() :
     global running, turn, grid, player, playing, clock
