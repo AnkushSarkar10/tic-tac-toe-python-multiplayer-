@@ -14,8 +14,8 @@ def create_thread(target):
 import socket
 
 
-# HOST = "127.0.0.1"  
-HOST = "192.168.0.7"
+
+# HOST = "Enter IP"
 PORT = 65432
 ADDR = (HOST,PORT)
 connection_established = False
