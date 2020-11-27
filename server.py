@@ -14,9 +14,9 @@ def create_thread(target):
 import socket
 
 
-
-# HOST = "Enter IP"
+HOST = "127.0.0.1"
 PORT = 65432
+
 ADDR = (HOST,PORT)
 connection_established = False
 conn , addr = None, None
@@ -38,8 +38,8 @@ def receive_data():
         if data[2] == "yourturn":
             turn = True
         if data[3]  == "False":
-            grid.winner = "O"
-            grid.game_over = True
+            grid.winner = data[4]
+            grid.game_over = True 
         if grid.get_cell_value(x, y) == 0:
             grid.set_cell_value(x, y, "O")
 
@@ -98,10 +98,13 @@ def main() :
                         if grid.game_over:
                             playing  = "False"
                         #server sending data
-                        send_data = "{}-{}-{}-{}".format(Cell_X, Cell_Y, 'yourturn', playing).encode()
+                        send_data = "{}-{}-{}-{}-{}".format(Cell_X, Cell_Y, 'yourturn', playing, grid.winner).encode()
                         conn.send(send_data)
 
-                        turn = False    
+                        turn = False
+
+                    elif (not(turn)): 
+                        print("waiting for oppoents turn")
                         
                     # grid.print_grid()
             if event.type == pygame.KEYDOWN:

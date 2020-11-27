@@ -56,9 +56,13 @@ class Grid:
 
             if self.game_over:
                 font = pygame.font.SysFont('unispacebold', 60, True)
-                text = font.render("{} won the game!".format(self.winner), True, (47, 54, 64,1.0))
                 win.fill((9, 132, 227, 1.0))
-                win.blit(text, (35, 250))
+                if self.winner != None:
+                    text = font.render("{} won the game!".format(self.winner), True, (47, 54, 64,1.0))
+                    win.blit(text, (35, 250))
+                else:
+                    text = font.render("Draw!", True, (50, 54, 64,1.0))
+                    win.blit(text, (210, 250))
 
 
 
@@ -125,6 +129,7 @@ class Grid:
             self.winner = player
             self.game_over = True
         else:
+            self.winner = None
             self.game_over = self.is_grid_full()
                 
     def is_grid_full(self):
