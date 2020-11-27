@@ -38,7 +38,7 @@ def receive_data():
         if data[2] == "yourturn":
             turn = True
         if data[3]  == "False":
-            if data[4] = "None":
+            if data[4] == "None":
                 grid.winner = None
             else:
                 grid.winner = data[4]
