@@ -2,6 +2,7 @@ import pygame
 from grid import Grid
 import os
 
+
 #threading 
 import threading
 
@@ -15,7 +16,7 @@ def create_thread(target):
 import socket
 
 # HOST = "Enter IP"
-# PORT = "Enter PORT"
+# PORT = Enter PORT as int
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #sock stream is used for TCP protocols
 sock.connect((HOST,PORT))
@@ -29,9 +30,10 @@ def receive_data():
         if data[2] == "yourturn":
             turn = True
         if data[3]  == "False":
-            # grid.winner = "X"
-            grid.winner = data[4]
-            grid.game_over = True 
+            if data[4] = "None":
+                grid.winner = None
+            else:
+                grid.winner = data[4]
         if grid.get_cell_value(x, y) == 0:
             grid.set_cell_value(x, y, "X")
 
@@ -77,7 +79,7 @@ def main() :
                         if grid.game_over:
                             playing  = "False"
                         #client sending data
-                        send_data = "{}-{}-{}-{}-{}".format(Cell_X, Cell_Y, 'yourturn', playing, grid.winner).encode()
+                        send_data = "{}-{}-{}-{}-{}".format(Cell_X, Cell_Y, 'yourturn', playing, str(grid.winner)).encode()
                         sock.send(send_data)
 
                         turn = False

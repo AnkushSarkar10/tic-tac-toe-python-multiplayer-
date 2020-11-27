@@ -2,6 +2,7 @@ import pygame
 from grid import Grid
 import os
 
+
 #threading
 import threading
 
@@ -12,7 +13,6 @@ def create_thread(target):
 
 #socket
 import socket
-
 
 HOST = "127.0.0.1"
 PORT = 65432
@@ -38,7 +38,10 @@ def receive_data():
         if data[2] == "yourturn":
             turn = True
         if data[3]  == "False":
-            grid.winner = data[4]
+            if data[4] = "None":
+                grid.winner = None
+            else:
+                grid.winner = data[4]
             grid.game_over = True 
         if grid.get_cell_value(x, y) == 0:
             grid.set_cell_value(x, y, "O")
@@ -98,7 +101,7 @@ def main() :
                         if grid.game_over:
                             playing  = "False"
                         #server sending data
-                        send_data = "{}-{}-{}-{}-{}".format(Cell_X, Cell_Y, 'yourturn', playing, grid.winner).encode()
+                        send_data = "{}-{}-{}-{}-{}".format(Cell_X, Cell_Y, 'yourturn', playing, str(grid.winner)).encode()
                         conn.send(send_data)
 
                         turn = False
