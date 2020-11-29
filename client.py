@@ -15,8 +15,8 @@ def create_thread(target):
 #socket
 import socket
 
-# HOST = "Enter IP"
-# PORT = Enter PORT as int
+HOST = input("Enter IP of server : ")
+PORT = int(input("Enter PORT number : "))
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #sock stream is used for TCP protocols
 sock.connect((HOST,PORT))
@@ -34,6 +34,7 @@ def receive_data():
                 grid.winner = None
             else:
                 grid.winner = data[4]
+            grid.game_over = True
         if grid.get_cell_value(x, y) == 0:
             grid.set_cell_value(x, y, "X")
 
@@ -65,12 +66,20 @@ def main() :
      
     while running: 
         clock.tick(60) # frames i think
+
+        if turn and not(grid.game_over):
+            grid.waiting_for_move = False
+        elif ((not turn) and not(grid.game_over)):
+            grid.waiting_for_move = True
+            print("waiting for oppoents turn")
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and not grid.game_over:
                 if pygame.mouse.get_pressed()[0]:
                     if turn and not(grid.game_over):
+                        
 
                         pos = pygame.mouse.get_pos()
                         Cell_X, Cell_Y = pos[0]//200, pos[1]//200 #this gets me the cell being clicked
@@ -84,8 +93,6 @@ def main() :
 
                         turn = False
 
-                    elif (not(turn)): 
-                        print("waiting for oppoents turn")
                     
                     # grid.print_grid()
             if event.type == pygame.KEYDOWN:

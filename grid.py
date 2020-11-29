@@ -30,6 +30,8 @@ class Grid:
         
         self.waiting_for_conn = False
 
+        self.waiting_for_move = None
+
         self.game_over = False
 
         self.winner = None
@@ -38,7 +40,7 @@ class Grid:
     def draw(self, win):
         if self.waiting_for_conn:
             font = pygame.font.SysFont('unispacebold', 40, True)
-            text = font.render("Waiting for client...", True, (47, 54, 64,1.0))
+            text = font.render("Waiting for client...", True, (47, 54, 64))
             win.fill((9, 132, 227, 1.0))
             win.blit(text, (35, 250))
         else:
@@ -53,18 +55,24 @@ class Grid:
                         win.blit(x_img, (x*200, y*200))
                     elif self.get_cell_value(x,y) == "O":
                         win.blit(o_img, (x*200, y*200))
+            
+            if self.waiting_for_move:
+                font = pygame.font.SysFont('unispacebold', 37, True)
+                text = font.render("Opponents Turn!", True, (47, 54, 64))
+                text.set_alpha(160)
+                win.blit(text, (20, 250))
 
             if self.game_over:
                 font = pygame.font.SysFont('unispacebold', 60, True)
                 win.fill((9, 132, 227, 1.0))
                 if self.winner != None:
-                    text = font.render("{} won the game!".format(self.winner), True, (47, 54, 64,1.0))
+                    text = font.render("{} won the game!".format(self.winner), True, (47, 54, 64))
                     win.blit(text, (35, 250))
                 else:
-                    text = font.render("Draw!", True, (50, 54, 64,1.0))
+                    text = font.render("Draw!", True, (47, 54, 64))
                     win.blit(text, (210, 250))
 
-
+            
 
 
     def print_grid(self):

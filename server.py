@@ -88,12 +88,20 @@ def main() :
 
     while running: 
         clock.tick(60) # frames i think
+
+        if turn and not(grid.game_over):
+            grid.waiting_for_move = False
+        elif ((not turn) and not(grid.game_over)):
+            grid.waiting_for_move = True
+            print("waiting for oppoents turn")
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and (not grid.game_over) and connection_established:
                 if pygame.mouse.get_pressed()[0]:
                     if turn and not(grid.game_over):
+
                         pos = pygame.mouse.get_pos()
                         Cell_X, Cell_Y = pos[0]//200, pos[1]//200 #this gets me the cell being clicked
 
@@ -106,9 +114,6 @@ def main() :
 
                         turn = False
 
-                    elif (not(turn)): 
-                        print("waiting for oppoents turn")
-                        
                     # grid.print_grid()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and grid.game_over:                     
