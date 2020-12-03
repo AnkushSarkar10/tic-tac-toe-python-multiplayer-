@@ -93,9 +93,9 @@ def main() :
             grid.waiting_for_move = False
         elif ((not turn) and not(grid.game_over)):
             grid.waiting_for_move = True
-            print("waiting for oppoents turn")
 
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN and (not grid.game_over) and connection_established:
@@ -105,14 +105,15 @@ def main() :
                         pos = pygame.mouse.get_pos()
                         Cell_X, Cell_Y = pos[0]//200, pos[1]//200 #this gets me the cell being clicked
 
-                        grid.get_mouse(Cell_X, Cell_Y, player)
-                        if grid.game_over:
-                            playing  = "False"
-                        #server sending data
-                        send_data = "{}-{}-{}-{}-{}".format(Cell_X, Cell_Y, 'yourturn', playing, str(grid.winner)).encode()
-                        conn.send(send_data)
+                        if grid.get_cell_value(Cell_X,Cell_Y) == 0:
+                            grid.get_mouse(Cell_X, Cell_Y, player)
+                            if grid.game_over:
+                                playing  = "False"
+                            #server sending data
+                            send_data = "{}-{}-{}-{}-{}".format(Cell_X, Cell_Y, 'yourturn', playing, str(grid.winner)).encode()
+                            conn.send(send_data)
 
-                        turn = False
+                            turn = False
 
                     # grid.print_grid()
             if event.type == pygame.KEYDOWN:
@@ -124,7 +125,7 @@ def main() :
 
                 elif event.key == pygame.K_ESCAPE:
                     running = False
- 
+
 
         # rgba(116, 185, 255,1.0)
         # (22,32,101)
