@@ -1,6 +1,7 @@
 import pygame
 from grid import Grid
 import time
+import pyperclip
 import os
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = "500, 150"
@@ -9,7 +10,10 @@ width = 600
 height = 600
 
 win = pygame.display.set_mode((width, height))
+pygame.key.set_repeat(500, 50)
 pygame.display.set_caption("Tic-tac-toe")
+programIcon = pygame.image.load('images/icon_tic_tac_toe.png')
+pygame.display.set_icon(programIcon)
 
 
 #threading 
@@ -25,8 +29,8 @@ def create_thread(target):
 import socket
 
 
-HOST = "2.tcp.ngrok.io"
-PORT = 17333
+HOST = None
+PORT = None
 
 
 
@@ -48,7 +52,7 @@ active_host = False
 active_port = False
 
 def input_screen():
-    global running, clock, host_text, port_text, active_host, active_port
+    global running, clock, host_text, port_text, active_host, active_port, HOST, PORT
 
     while running:
 
@@ -56,38 +60,48 @@ def input_screen():
 
         mx, my = pygame.mouse.get_pos()
 
-        button_text = "Submit"
-        font = pygame.font.Font("Fonts/Nunito-Black.ttf", 30)
-        input_color_active = pygame.Color('lightskyblue3')
-        input_color_passive = pygame.Color('gray15')
-        button_color = (255, 0, 0)
+        # fonts
+        title_font = pygame.font.Font("Fonts/Nunito-ExtraBold.ttf", 40)
+        host_title_font = pygame.font.Font("Fonts/Nunito-Bold.ttf", 25)
+        port_title_font = pygame.font.Font("Fonts/Nunito-Bold.ttf", 25)
+
+        host_port_text_font = pygame.font.Font("Fonts/Nunito-Regular.ttf", 25)
+        button_font = pygame.font.Font("Fonts/Nunito-Black.ttf", 30)
+
+        # titles
+        title_text = title_font.render("Enter Host's IP and PORT", True, (255,250,250))
+        host_title_text = host_title_font.render("IP Address", True, (245,245,245))
+        port_title_text = port_title_font.render("PORT", True, (245,245,245))
+        win.blit(title_text, (65, 90))
+        win.blit(host_title_text, (30, 210))
+        win.blit(port_title_text, (60, 300))
         
-        
+        # colors
+        input_color_active = (149,175,192)
+        input_color_passive = (83,92,104)
+        button_color = (190,46,221)
     
         click = False
+       
 
         # rects
-        
-        button_rect = pygame.Rect(200, 400, 200, 50)
-        host_rect = pygame.Rect(200,200, 240, 52)
-        port_rect = pygame.Rect(200,300, 240, 52)
+        button_rect = pygame.Rect(210, 420, 200, 50)
+        host_rect = pygame.Rect(190, 210, 250, 42)
+        port_rect = pygame.Rect(190,300, 250, 42)
 
-        if button_rect.collidepoint((mx, my)):
-            if click:
-                main()
 
         # text surfaces
-        text_surface_button = font.render(button_text,True,(255,255,255))
-        text_surface_host = font.render(host_text,True,(0,0,0))
-        text_surface_port = font.render(port_text,True,(0,0,0))
+        text_surface_button = button_font.render("Submit",True,(255,255,255))
+        text_surface_host = host_port_text_font.render(host_text,True,(245,245,245))
+        text_surface_port = host_port_text_font.render(port_text,True,(245,245,245))
 
         # cursor
-        cursor_color = (211,211,211)
+        cursor_color = (83,92,104)
         cursor_host = pygame.Rect((host_rect.x + 5,host_rect.y + 5), (2, host_rect.height - 10))
         cursor_port = pygame.Rect((port_rect.x + 5,port_rect.y + 5), (2, port_rect.height - 10))
 
-        cursor_host.x += text_surface_host.get_width()
-        cursor_port.x += text_surface_port.get_width()
+        cursor_host.x += (text_surface_host.get_width() + 2)
+        cursor_port.x += (text_surface_port.get_width() + 2)
 
         if active_host:
             if time.time() % 1 > 0.5:
@@ -96,24 +110,28 @@ def input_screen():
         if active_port:
             if time.time() % 1 > 0.5:
                 pygame.draw.rect(win, cursor_color, cursor_port)
-    
+                
         # event loop
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
                 if active_host:
                     if event.key == pygame.K_BACKSPACE:
+                        print("backspaccce")
                         host_text = host_text[0:-1]
+                    elif event.key == pygame.K_v and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                        host_text += pyperclip.paste()
                     else:
                         host_text += event.unicode
-
-                    
 
                 
                 if active_port:
                     if event.key == pygame.K_BACKSPACE:
                         port_text = port_text[0:-1]
+                    elif event.key == pygame.K_v and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                        port_text += pyperclip.paste()
                     else:
                         port_text += event.unicode
 
@@ -129,12 +147,17 @@ def input_screen():
 
                 if event.button == 1:
                     click = True
-        
+
+            if button_rect.collidepoint((mx, my)):
+                if click:
+                    HOST = host_text
+                    PORT = int(port_text)
+                    main()
         
         
         # dynamic width
-        host_rect.width = max(240, text_surface_host.get_width()+ 20)
-        port_rect.width = max(240, text_surface_port.get_width()+ 20)
+        host_rect.width = max(350, text_surface_host.get_width()+ 20)
+        port_rect.width = max(350, text_surface_port.get_width()+ 20)
 
         
 

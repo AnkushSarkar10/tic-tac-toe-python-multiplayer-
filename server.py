@@ -57,6 +57,8 @@ height = 600
 
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Tic-tac-toe")
+programIcon = pygame.image.load('images/icon_tic_tac_toe.png')
+pygame.display.set_icon(programIcon)
 
 # set variables
 running = True
