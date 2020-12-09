@@ -11,7 +11,6 @@ x_img = pygame.transform.scale(x_img, (200, 200))
 o_img = pygame.transform.scale(o_img, (200, 200)) 
    
 
-
 class Grid:
     def __init__(self):
         self.grid_lines = [((0,200), (600,200)), #first h-line

@@ -33,7 +33,6 @@ HOST = None
 PORT = None
 
 
-
 # set some variables
 running = True
 player = "O"
@@ -239,7 +238,6 @@ def main() :
 
                             turn = False
                     
-                    # grid.print_grid()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and grid.game_over:                     
                     grid.clear_grid()
