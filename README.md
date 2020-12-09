@@ -1,6 +1,6 @@
 # Tic Tac Toe
 
-[The app](https://py-bl0g.herokuapp.com/home)
+This is an online multiplayer Tic Tac Toe game.
 
 ## Built With
 
@@ -17,3 +17,10 @@ other dependencies are in the _requirements.txt_.
 * [grid.py](/grid.py.py) - This has the classes defining the grid of the Tic tac Toe as well as most of the game logic. 
 * [Fonts](/Fonts) - This contains all the fonts that were used in the project.
 * [images](/images) -  This contains all the images used in the project.
+
+
+## Contributers
+
+* Ankush Sarkar
+* Areeb Iqbal
+* Alan Thomas
