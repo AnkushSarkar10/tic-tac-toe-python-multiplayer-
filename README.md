@@ -22,5 +22,3 @@ other dependencies are in the _requirements.txt_.
 ## Contributers
 
 * Ankush Sarkar
-* Areeb Iqbal
-* Alan Thomas
